@@ -1,12 +1,13 @@
 package test
 
+import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.windowing.time.Time
 
 object SocketWindowWordCount {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
-
+    env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
     val textStream = env.socketTextStream("localhost", 9000, '\n')
     val windowWordCount = textStream
       .flatMap(line => line.split("\\s"))
